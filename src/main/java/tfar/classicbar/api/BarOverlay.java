@@ -1,0 +1,43 @@
+package tfar.classicbar.api;
+
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.player.Player;
+import tfar.classicbar.impl.BarOverlayImpl;
+import tfar.classicbar.util.Color;
+import tfar.classicbar.util.ModUtils;
+
+public interface BarOverlay {
+
+    void setBarSettings(BarSettings barSettings);
+
+    boolean rightHandSide();
+
+    BarOverlay setSide(boolean right);
+
+    /**
+     * @param vOffset distance from the bottom of the screen this bar should be drawn at;
+     *                driven by the vanilla {@code leftHeight}/{@code rightHeight} counters.
+     */
+    void render(GuiGraphics graphics, Player player, int screenWidth, int screenHeight, int vOffset);
+
+    ResourceLocation getIconRL();
+
+    default void bindIconTexture() {
+        ModUtils.CURRENT_TEXTURE = getIconRL();
+    }
+
+    default void bindBarTexture() {
+        ModUtils.CURRENT_TEXTURE = BarOverlayImpl.ICON_BAR;
+    }
+
+    double getBarWidth(Player player);
+
+    Color getPrimaryBarColor(int index, Player player);
+
+    Color getSecondaryBarColor(int index, Player player);
+
+    boolean isFitted();
+
+    String name();
+}

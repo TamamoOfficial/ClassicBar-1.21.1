@@ -1,0 +1,80 @@
+plugins {
+    id 'java'
+    id 'net.neoforged.moddev' version '2.0.148'
+}
+
+group = mod_group
+version = mod_version
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
+}
+
+neoForge {
+    version = neoforge_version
+
+    runs {
+        client {
+            client()
+            // Dev window sized so the whole HUD is visible when testing bar layouts.
+            programArguments.addAll '--width', '1920', '--height', '1080'
+        }
+        server {
+            server()
+            programArgument '--nogui'
+        }
+    }
+
+    mods {
+        "${mod_id}" {
+            sourceSet sourceSets.main
+        }
+    }
+}
+
+repositories {
+    mavenLocal()
+    maven {
+        name = 'Cursemaven'
+        url = 'https://cursemaven.com'
+        content {
+            includeGroup 'curse.maven'
+        }
+    }
+    maven {
+        name = 'NeoForged'
+        url = 'https://maven.neoforged.net/releases'
+    }
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+}
+
+tasks.named('processResources', ProcessResources).configure {
+    def props = [
+        mod_id                 : mod_id,
+        mod_name               : mod_name,
+        mod_version            : mod_version,
+        mod_authors            : mod_authors,
+        mod_license            : mod_license,
+        mod_description        : mod_description,
+        minecraft_version      : minecraft_version,
+        minecraft_version_range: minecraft_version_range,
+        neoforge_version       : neoforge_version,
+        neoforge_version_range : neoforge_version_range,
+    ]
+    inputs.properties(props)
+    filesMatching(['META-INF/neoforge.mods.toml']) {
+        expand props
+    }
+}
+
+dependencies {
+    // Optional integrations: compileOnly so neither mod is a hard runtime dependency.
+    // ParCool 1.21.1 (4.x) is not on Cursemaven under the 1.20.1 file id, so it is resolved
+    // from the local repository as a plain jar for signatures only.
+    compileOnly "com.alrex.parcool:ParCool-1.21.1:4.0.2.0"
+}
