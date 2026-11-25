@@ -36,3 +36,7 @@ HUD 纯客户端；服务端也装的话饱和度与饥饿消耗会同步得更�
 原版设计归 [Tfarecnim](https://github.com/Tfarcenim/ClassicBar)，
 代码基础来自 [Waterpicker 的 1.20.1 分支](https://github.com/Waterpicker/ClassicBar/tree/1.20.1)，
 另参考 [Classic-Bar-Legacy](https://github.com/CanoeStudioOfficial/Classic-Bar-Legacy)。
+
+## 许可
+
+[MIT](LICENSE) © 2026 TamamoOfficial
