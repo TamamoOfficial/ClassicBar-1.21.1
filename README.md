@@ -12,6 +12,9 @@
 
 数值、图标、左右位置、颜色均可配置。
 
+饥饿条会读取 `apotheosis_expansion:max_food` 属性作为分母。装了 Apotheosis Expansion 时，
+饱食度上限提高后这条槽仍按满格显示，而不是卡在 20；未装时按原版 20 处理，行为不变。
+
 ## 安装
 
 Minecraft 1.21.1 + NeoForge 21.1.x，jar 丢进 `mods/` 即可，无强制前置。
@@ -28,7 +31,7 @@ HUD 纯客户端；服务端也装的话饱和度与饥饿消耗会同步得更�
 
 ```bash
 ./gradlew build
-# 产物：build/libs/ClassicBar-3.0.0-1.21.1.jar
+# 产物：build/libs/ClassicBar-3.0.1-1.21.1.jar
 ```
 
 ## 致谢

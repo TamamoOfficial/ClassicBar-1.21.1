@@ -6,6 +6,7 @@ import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.ItemStack;
+import tfar.classicbar.compat.HungerCapacity;
 import tfar.classicbar.compat.ModCompat;
 import tfar.classicbar.config.ClassicBarsConfig;
 import tfar.classicbar.config.ConfigCache;
@@ -30,7 +31,9 @@ public class Hunger extends BarOverlayImpl {
     @Override
     public void renderBar(GuiGraphics graphics, Player player, int screenWidth, int screenHeight, int vOffset) {
         double hunger = player.getFoodData().getFoodLevel();
-        double maxHunger = 20;
+        // The ceiling is an attribute when Apotheosis Expansion (or anything else) provides one; 20 otherwise.
+        // Every ratio below divides by it, so a raised ceiling keeps the bar readable instead of pinning it full.
+        double maxHunger = HungerCapacity.maxFood(player);
 
         double barWidthH = getBarWidth(player);
 
@@ -129,13 +132,16 @@ public class Hunger extends BarOverlayImpl {
     @Override
     public double getBarWidth(Player player) {
         double hunger = player.getFoodData().getFoodLevel();
-        double maxHunger = 20;
+        double maxHunger = HungerCapacity.maxFood(player);
         return Math.ceil(BarOverlayImpl.WIDTH * hunger / maxHunger);
     }
 
     public int getSatBarWidth(Player player) {
         double saturation = player.getFoodData().getSaturationLevel();
-        double maxSat = 20;
+        // Saturation is bounded by the food level, not by 20 (see FoodData#add), so the ceiling is the same one.
+        // Vanilla never lets saturation exceed 20 because it never lets foodLevel exceed 20; with a raised ceiling
+        // both move together, which is what keeps this bar proportional.
+        double maxSat = HungerCapacity.maxFood(player);
         return (int) Math.ceil(BarOverlayImpl.WIDTH * saturation / maxSat);
     }
 
